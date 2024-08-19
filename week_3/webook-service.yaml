@@ -1,0 +1,24 @@
+# API 版本
+apiVersion: v1
+# 资源类型为 Service
+kind: Service
+# 服务的元数据
+metadata:
+  # 服务的名称
+  name: webook-record-service
+# 服务的规格说明
+spec:
+  # 服务的选择器，用于确定服务应该将流量发送到哪些 Pod
+  selector:
+    # 根据标签选择器，选择标签为 app: webook-record 的 Pod
+    app: webook-record
+  # 服务要暴露的端口列表
+  ports:
+    # 端口的协议，这里是 TCP
+    - protocol: TCP
+      # 服务暴露的端口号
+      port: 8081
+      # 目标端口号，即流量应该被转发到的容器上的端口号
+      targetPort: 8080
+  # 服务的类型，这里是 ClusterIP，表示服务只能在集群内部访问
+  type: ClusterIP

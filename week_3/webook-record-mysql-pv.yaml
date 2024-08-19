@@ -1,0 +1,21 @@
+# API 版本，这里是 v1
+apiVersion: v1
+# 资源类型，是 PersistentVolume
+kind: PersistentVolume
+# 资源的元数据
+metadata:
+  # 资源的名称，这里是 webook-mysql-pvc
+  name: webook-mysql-pvc
+# PV 的具体信息
+spec:
+  # 存储类，用于指定 PV 的存储类型，这里是 record
+  storageClassName: record
+  # 存储容量，这里描述了 PV 可以提供的存储空间大小，为 1Gi
+  capacity:
+    storage: 1Gi
+  # 访问模式，ReadWriteOnce 表示只有一个节点可以读写挂载这个 PV 的卷，这里设置为了 ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
+  # 使用的 hostPath 类型的存储，指定了物理机上的路径，这里设置为了 /mnt/data
+  hostPath:
+    path: "/mnt/data"

@@ -1,0 +1,39 @@
+# API 版本，这里是 networking.k8s.io/v1，表示入口资源的定义版本
+apiVersion: networking.k8s.io/v1
+# 资源类型，是 Ingress 类型，用于将外部流量路由到集群内部的服务
+kind: Ingress
+# 元数据，包含了入口对象的名称和注释
+metadata:
+  # 入口对象的名称
+  name: webook-record-ingress
+  # 入口对象的注释，用于提供额外的信息
+  annotations:
+    # Nginx Ingress 控制器的注释，指定重写目标的 URL
+    nginx.ingress.kubernetes.io/rewrite-target: /
+# 入口对象的定义，包含了入口的规则
+spec:
+  # 入口类别名称，这里指定使用 Nginx 入口控制器
+  ingressClassName: nginx
+  # 入口规则的列表，这里只有一条规则
+  rules:
+    # 规则适用的主机名，这里是 localhost，表示只有访问 localhost 的请求才会被这个入口处理
+    - host: localhost
+      # HTTP 路径匹配规则
+      http:
+        # 路径规则的列表，这里只有一条路径规则
+        paths:
+          # 路径模式，这里使用前缀匹配，表示所有访问 / 的请求都会被匹配
+          - path: /
+            # 路径类型，这里是 Prefix，表示使用前缀匹配
+            pathType: Prefix
+            # 后端服务的定义，当请求匹配到这个路径时，应该将请求转发到后端的这个服务
+            backend:
+              # 后端服务的名称
+              service:
+                # 服务的名称
+                name: webook-record-service
+                # 服务的端口号
+                port:
+                  number: 8081
+
+                

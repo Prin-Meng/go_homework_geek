@@ -1,0 +1,31 @@
+# API 版本
+apiVersion: apps/v1
+# Kind 类型
+kind: Deployment
+# 元数据
+metadata:
+  # Deployment 的名称
+  name: webook-record-deployment
+spec:
+  # 期望的副本数
+  replicas: 2
+  selector:
+    # 标签选择器，用于选择要管理的 Pod
+    matchLabels:
+      # 应用程序的标签
+      app: webook-record
+  template:
+    metadata:
+      # Pod 的标签，与 selector 中的标签相匹配
+      labels:
+        app: webook-record
+    spec:
+      # 容器定义
+      containers:
+      # 容器的名称
+        - name: webook-record
+          # 容器使用的镜像
+          image: prin/webook:v0.0.1
+          # 容器要侦听的端口
+          ports:
+            - containerPort: 8080

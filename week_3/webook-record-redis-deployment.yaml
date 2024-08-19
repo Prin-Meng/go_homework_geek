@@ -1,0 +1,61 @@
+# API 版本
+apiVersion: apps/v1
+# 资源类型为 Deployment
+kind: Deployment
+# 元数据
+metadata:
+  # Deployment 的名称
+  name: webook-record-redis
+  # 标签，用于区分不同的 Deployment
+  labels:
+    app: webook-record-redis
+# Deployment 的详细配置
+spec:
+  # 期望的副本数
+  replicas: 1
+  # 标签选择器，用于选择要管理的 Pod
+  selector:
+    # 标签选择器的规则，匹配标签为 app: webook-record-redis 的 Pod
+    matchLabels:
+      app: webook-record-redis
+  # Pod 的模板，包含了容器的定义
+  template:
+    # Pod 模板的元数据
+    metadata:
+      # Pod 的名称，与 Deployment 名称相同
+      name: webook-record-redis
+      # Pod 的标签，与 Deployment 标签相同
+      labels:
+        app: webook-record-redis
+    # Pod 的详细配置
+    spec:
+      # 容器的定义
+      containers:
+      # 容器的名称
+        - name: webook-record-redis
+          # 使用的镜像
+          image: redis:latest
+          # 环境变量，设置了 MYSQL_ROOT_PASSWORD 为 root
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+          # 镜像拉取策略，当本地不存在时才拉取
+          imagePullPolicy: IfNotPresent
+          # 容器要暴露的端口
+          ports:
+          # 容器端口号
+            - containerPort: 6379
+          # 卷挂载，将一个名为 mysql-storage 的 Volume 挂载到容器内的 /var/lib/mysql 目录
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-storage
+      # Pod 的重启策略，这里设置为 Always，意味着容器总是会在出错或终止时重启
+      restartPolicy: Always
+      # 定义 Volume，使得 Pod 中的容器可以共享文件存储
+      volumes:
+        # 定义一个名为 mysql-storage 的 Volume
+        - name: mysql-storage
+          # 使用 PersistentVolumeClaim 方式提供存储，通过 PVC 绑定一个名为 webook-mysql-pvc 的持久化存储声明
+          persistentVolumeClaim:
+#            PVC persistent volume claim
+            claimName: webook-mysql-pvc

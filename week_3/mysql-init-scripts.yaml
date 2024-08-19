@@ -1,0 +1,15 @@
+# API 版本
+# 指定 API 版本为 v1
+apiVersion: v1
+# 资源类型为 ConfigMap
+kind: ConfigMap
+# 对象元数据
+metadata:
+  # 指定该资源的名称
+  name: mysql-init-scripts
+# 该 ConfigMap 所包含的数据
+data:
+  # 文件名，init.sql，内容如下：
+  init.sql: |
+    CREATE DATABASE webook;
+

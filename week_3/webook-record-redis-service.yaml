@@ -1,0 +1,26 @@
+# API 版本，这里是 v1
+apiVersion: v1
+# 资源类型，是 Service
+kind: Service
+# 对象元数据
+metadata:
+  # 指定 Service 的名字
+  name: webook-record-redis
+# Service 的详细定义
+spec:
+  # 选择器，用于指定 Service 关联的 Pod 标签
+  selector:
+    # 标签键值对，用于匹配 Service 的后端 Pod
+    app: webook-record-redis
+  # Service 暴露的端口定义
+  ports:
+    # 端口的协议
+    - protocol: TCP
+      # Service 公开的端口号
+      port: 6380
+      # 节点上公开的端口号，使得可以从集群外部访问该 Service
+      nodePort: 31379
+      # 流量被转发到的容器端口号
+      targetPort: 6379
+  # Service 的类型是 NodePort
+  type: NodePort
